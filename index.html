@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>打赏支持</title>
+<meta name="description" content="如果我的内容对你有帮助，欢迎通过爱发电或扫码打赏支持我。">
+<meta name="theme-color" content="#f4ede3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16110d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+  :root {
+    --paper: #f4ede3;
+    --ink: #2a2019;
+    --muted: #8b7b6a;
+    --line: #e0d3c0;
+    --crema: #c08447;
+    --tint: rgba(192, 132, 71, .10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #16110d;
+      --ink: #eadfd2;
+      --muted: #9b8b79;
+      --line: #322a21;
+      --crema: #d9a05b;
+      --tint: rgba(217, 160, 91, .07);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background-color: var(--paper);
+    background-image: radial-gradient(900px 480px at 50% -80px, var(--tint), transparent 70%);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 24px;
+    line-height: 1.8;
+  }
+  main { width: 100%; max-width: 640px; text-align: center; }
+  .lang {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    letter-spacing: .12em;
+  }
+  .lang span { color: var(--muted); opacity: .5; }
+  .lang button {
+    background: none;
+    border: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px 2px;
+    transition: color .15s ease;
+  }
+  .lang button:hover { color: var(--ink); }
+  .lang button[aria-pressed="true"] { color: var(--ink); font-weight: 600; }
+
+  /* ---- coffee cup: static resolved state is the base ---- */
+  .cup { display: block; width: 118px; height: auto; margin: 0 auto 10px; }
+  .draw {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+  .steam {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    opacity: .4;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .surface { fill: var(--crema); }
+  .latte {
+    fill: var(--paper);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  h1 {
+    font-family: Georgia, "Times New Roman", "Songti SC", SimSun, serif;
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    margin: 0 0 12px;
+  }
+  .intro { color: var(--muted); font-size: 15px; max-width: 26em; margin: 0 auto; }
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 56px;
+  }
+  .option {
+    padding: 8px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .option + .option { border-left: 1px solid var(--line); }
+  .option h2 {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: .12em;
+  }
+  .option p { color: var(--muted); font-size: 14px; max-width: 17em; }
+  .btn {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: .08em;
+    padding: 9px 24px;
+    transition: background-color .18s ease, color .18s ease, transform .12s ease;
+  }
+  .btn:hover { background: var(--ink); color: var(--paper); }
+  .btn:active { transform: scale(.96); }
+  .btn svg { width: 12px; height: 12px; }
+  .qr {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 10px;
+    display: inline-block;
+    cursor: zoom-in;
+    transition: transform .15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .qr:hover { transform: scale(1.02); }
+  .qr:active { transform: scale(.97); }
+  .qr img { display: block; width: 190px; height: auto; border-radius: 3px; }
+  .hint { font-size: 13px; }
+  .thanks {
+    margin-top: 64px;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: .1em;
+  }
+  .thanks::before {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--line);
+    margin: 0 auto 20px;
+  }
+  .github {
+    margin-top: 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: .05em;
+    transition: color .15s ease;
+  }
+  .github:hover { color: var(--ink); }
+  .github svg { width: 15px; height: 15px; }
+  .btn:focus-visible, .qr:focus-visible, .github:focus-visible, .lang button:focus-visible {
+    outline: 2px solid var(--crema);
+    outline-offset: 3px;
+  }
+  .swap { animation: swap .18s ease-out; }
+
+  /* ---- motion opts IN only when allowed; reduced motion keeps the static state above ---- */
+  @media (prefers-reduced-motion: no-preference) {
+    .draw {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: draw .8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    .rim { animation-delay: .15s; }
+    .body { animation-delay: .35s; }
+    .handle { animation-delay: .8s; }
+    .saucer { animation-delay: 1s; }
+    .surface, .latte { opacity: 0; animation: appear .6s ease forwards; }
+    .surface { animation-delay: 1.15s; }
+    .latte {
+      animation: appear .6s ease 1.3s forwards,
+                 beat 2.6s ease-in-out 2.4s infinite;
+    }
+    .steam { opacity: 0; animation: steam 2.8s ease-in-out infinite; }
+    .s1 { animation-delay: 1.6s; }
+    .s2 { animation-delay: 2s; }
+    .s3 { animation-delay: 2.4s; }
+    .rise { opacity: 0; animation: rise .7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .r1 { animation-delay: .15s; }
+    .r2 { animation-delay: .3s; }
+    .r3 { animation-delay: .45s; }
+    .r4 { animation-delay: .6s; }
+  }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes appear { to { opacity: 1; } }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes steam {
+    0% { opacity: 0; transform: translateY(3px); }
+    30% { opacity: .55; }
+    65% { opacity: .3; }
+    100% { opacity: 0; transform: translateY(-7px); }
+  }
+  @keyframes beat {
+    0%, 100% { transform: scale(1); }
+    12% { transform: scale(1.12); }
+    24% { transform: scale(1); }
+    36% { transform: scale(1.07); }
+    48% { transform: scale(1); }
+  }
+  @keyframes swap { from { opacity: .3; } }
+
+  @media (max-width: 560px) {
+    .options { grid-template-columns: 1fr; }
+    .option { padding: 32px 8px; }
+    .option + .option { border-left: none; border-top: 1px solid var(--line); }
+    h1 { font-size: 28px; }
+    .lang { right: 16px; }
+  }
+</style>
+</head>
+<body>
+<nav class="lang" aria-label="Language">
+  <button type="button" data-lang="zh" aria-pressed="true">中文</button>
+  <span aria-hidden="true">/</span>
+  <button type="button" data-lang="en" aria-pressed="false">EN</button>
+</nav>
+
+<main>
+  <svg class="cup" viewBox="0 0 120 110" aria-hidden="true">
+    <path class="steam s1" d="M46 30 C42 24 50 20 46 13"/>
+    <path class="steam s2" d="M60 28 C56 22 64 18 60 10"/>
+    <path class="steam s3" d="M74 30 C70 24 78 20 74 13"/>
+    <path class="draw rim" pathLength="1" d="M32 44 a28 7 0 1 0 56 0 a28 7 0 1 0 -56 0"/>
+    <path class="draw body" pathLength="1" d="M32 45 C33 62 36 80 44 85 C50 88.5 70 88.5 76 85 C84 80 87 62 88 45"/>
+    <path class="draw handle" pathLength="1" d="M88 52 C99 50 101 66 87 70"/>
+    <path class="draw saucer" pathLength="1" d="M30 96 Q60 105 90 96"/>
+    <ellipse class="surface" cx="60" cy="44" rx="22.5" ry="5"/>
+    <g transform="translate(60 44.4) scale(0.62) translate(-12 -12.2)">
+      <path class="latte"
+        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </g>
+  </svg>
+
+  <h1 class="rise r1" data-i18n="title">请我喝杯咖啡</h1>
+  <p class="intro rise r2" data-i18n="intro">如果我的内容对你有所帮助，欢迎通过以下任意方式支持我。</p>
+
+  <section class="options rise r3">
+    <article class="option">
+      <h2 data-i18n="afdianTitle">爱发电</h2>
+      <p data-i18n="afdianDesc">在爱发电平台上持续支持，见证每一次更新。</p>
+      <a class="btn" href="https://afdian.com/a/s1acr" target="_blank" rel="noopener">
+        <span data-i18n="afdianBtn">前往爱发电</span>
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <path d="M3.5 8.5 8.5 3.5M4.5 3.5h4v4"/>
+        </svg>
+      </a>
+    </article>
+
+    <article class="option">
+      <h2 data-i18n="qrTitle">扫码打赏</h2>
+      <a class="qr" href="收款码_merged.png" target="_blank" rel="noopener" title="点击放大查看" data-i18n-title="qrZoom">
+        <img src="收款码_merged.png" alt="微信 / 支付宝收款二维码" data-i18n-alt="qrAlt">
+      </a>
+      <p class="hint" data-i18n="qrHint">微信 / 支付宝扫一扫</p>
+    </article>
+  </section>
+
+  <p class="thanks rise r4" data-i18n="thanks">谢谢每一份支持</p>
+  <a class="github rise r4" href="https://github.com/s1acr" target="_blank" rel="noopener">
+    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+    github.com/s1acr
+  </a>
+</main>
+
+<script>
+  var I18N = {
+    zh: {
+      htmlLang: "zh-CN",
+      docTitle: "打赏支持",
+      docDesc: "如果我的内容对你有帮助，欢迎通过爱发电或扫码打赏支持我。",
+      title: "请我喝杯咖啡",
+      intro: "如果我的内容对你有所帮助，欢迎通过以下任意方式支持我。",
+      afdianTitle: "爱发电",
+      afdianDesc: "在爱发电平台上持续支持，见证每一次更新。",
+      afdianBtn: "前往爱发电",
+      qrTitle: "扫码打赏",
+      qrHint: "微信 / 支付宝扫一扫",
+      qrZoom: "点击放大查看",
+      qrAlt: "微信 / 支付宝收款二维码",
+      thanks: "谢谢每一份支持"
+    },
+    en: {
+      htmlLang: "en",
+      docTitle: "Sponsor Me",
+      docDesc: "If my work has helped you, consider supporting me via Afdian or a QR code tip.",
+      title: "Buy Me a Coffee",
+      intro: "If anything I have made has helped you, consider supporting me in any of the following ways.",
+      afdianTitle: "Afdian",
+      afdianDesc: "Ongoing support on Afdian, behind every update I ship.",
+      afdianBtn: "Visit Afdian",
+      qrTitle: "Scan to Tip",
+      qrHint: "WeChat / Alipay",
+      qrZoom: "Click to enlarge",
+      qrAlt: "WeChat / Alipay payment QR code",
+      thanks: "Thank you for every bit of support"
+    }
+  };
+
+  function applyLang(lang, first) {
+    var dict = I18N[lang];
+    if (!dict) return;
+    document.documentElement.lang = dict.htmlLang;
+    document.title = dict.docTitle;
+    document.querySelector('meta[name="description"]').setAttribute("content", dict.docDesc);
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      el.textContent = dict[el.getAttribute("data-i18n")];
+    });
+    document.querySelectorAll("[data-i18n-title]").forEach(function (el) {
+      el.title = dict[el.getAttribute("data-i18n-title")];
+    });
+    document.querySelectorAll("[data-i18n-alt]").forEach(function (el) {
+      el.alt = dict[el.getAttribute("data-i18n-alt")];
+    });
+    document.querySelectorAll(".lang button").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang));
+    });
+    if (!first) {
+      var main = document.querySelector("main");
+      main.classList.remove("swap");
+      void main.offsetWidth;
+      main.classList.add("swap");
+    }
+  }
+
+  document.querySelectorAll(".lang button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var lang = b.getAttribute("data-lang");
+      applyLang(lang, false);
+      try { localStorage.setItem("sponsor-lang", lang); } catch (e) {}
+    });
+  });
+
+  var saved = null;
+  try { saved = localStorage.getItem("sponsor-lang"); } catch (e) {}
+  var initial = I18N[saved] ? saved
+    : ((navigator.language || "").toLowerCase().indexOf("zh") === 0 ? "zh" : "en");
+  applyLang(initial, true);
+
+  /* seek harness: ?t=<seconds> freezes the CSS animations on a still frame */
+  (function () {
+    var t = new URLSearchParams(location.search).get("t");
+    if (t === null) return;
+    document.querySelectorAll(".draw, .steam, .surface, .latte, .rise").forEach(function (el) {
+      el.style.animationDelay = (-parseFloat(t)) + "s";
+      el.style.animationPlayState = "paused";
+    });
+    window.__ready = true;
+  })();
+</script>
+</body>
+</html>
